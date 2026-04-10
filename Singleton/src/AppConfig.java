@@ -3,13 +3,11 @@ import java.io.InputStream;
 import java.util.Properties;
 
 
-public class AppConfig {
-
+class AppConfig {
     private static final AppConfig INSTANCE = new AppConfig();
     private final Properties properties;
 
-
-    private AppConfig() {
+    protected AppConfig() {
         properties = new Properties();
 
         try (InputStream input = getClass().getResourceAsStream("/config.properties")) {
@@ -28,7 +26,12 @@ public class AppConfig {
         return properties.getProperty(key);
     }
 
+    public void setProperty(String key, String value) {
+        properties.setProperty(key, value);
+    }
+}
 
+class Test {
     public static void main(String[] args) {
 
         AppConfig config1 = AppConfig.getInstance();
@@ -37,7 +40,7 @@ public class AppConfig {
         System.out.println("Имя приложения 1 : " + config1.getProperty("app.name"));
         System.out.println("Имя приложения 2 : " + config2.getProperty("app.name"));
 
-        config1.properties.setProperty("app.name", "ChangeApp");
+        config1.setProperty("app.name", "ChangeApp");
 
         System.out.println("Имя приложения 1 : " + config1.getProperty("app.name"));
         System.out.println("Имя приложения 2 : " + config2.getProperty("app.name"));
