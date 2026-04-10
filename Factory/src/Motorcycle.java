@@ -27,10 +27,6 @@ public class Motorcycle implements Transport {
 
     public Motorcycle(String brand) {
         this.brand = brand;
-        for (int i = 0; i < 1; i++) {
-            insertLast(new Model());
-            size++;
-        }
     }
 
     private void insertLast(Model node) {
@@ -93,7 +89,7 @@ public class Motorcycle implements Transport {
     }
 
     @Override
-    public void setModelName(String oldName, String newName) // или изменение имени модели
+    public void setModelName(String oldName, String newName)
             throws NoSuchModelNameException, DuplicateModelNameException {
         if (findByName(newName) != null) throw new DuplicateModelNameException(newName);
         Model m = findByName(oldName);
@@ -106,14 +102,6 @@ public class Motorcycle implements Transport {
         if (price < 0) throw new ModelPriceOutOfBoundsException(price);
 
         if (findByName(name) != null) throw new DuplicateModelNameException(name);
-
-        for (Model cur = head.next; cur != head; cur = cur.next) {
-            if (cur.name == null) {
-                cur.name = name;
-                cur.price = price;
-                return;
-            }
-        }
 
         insertLast(new Model(name, price));
         size++;

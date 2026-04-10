@@ -104,14 +104,14 @@ class TransportUtils {
             carOriginal.addModel("M3", 70000);
 
             Car carCopy = (Car) carOriginal.clone();
-            carCopy.setBrand("BMW (копия)");
+            carCopy.setBrand("BMW копия");
             carCopy.setModelPrice("X5", 99999);
 
             System.out.println("Оригинал: " + carOriginal);
             System.out.println("Копия:    " + carCopy);
 
-            System.out.println("carOriginal != carCopy            : " + (carOriginal != carCopy));
-            System.out.println("Массивы тоже разные (глубокий клон): " + (carOriginal.getModelNames() != carCopy.getModelNames()));
+            System.out.println(carOriginal != carCopy);
+            System.out.println(carOriginal.getModelNames() != carCopy.getModelNames());
 
         } catch (CloneNotSupportedException e) {
             System.err.println("Клонирование не поддерживается: " + e.getMessage());

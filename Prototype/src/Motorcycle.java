@@ -27,10 +27,6 @@ public class Motorcycle implements Transport, Cloneable {
 
     public Motorcycle(String brand) {
         this.brand = brand;
-        for (int i = 0; i < 1; i++) {
-            insertLast(new Model());
-            size++;
-        }
     }
 
     private void insertLast(Model node) {
@@ -107,14 +103,6 @@ public class Motorcycle implements Transport, Cloneable {
 
         if (findByName(name) != null) throw new DuplicateModelNameException(name);
 
-        for (Model cur = head.next; cur != head; cur = cur.next) {
-            if (cur.name == null) {
-                cur.name = name;
-                cur.price = price;
-                return;
-            }
-        }
-
         insertLast(new Model(name, price));
         size++;
     }
@@ -145,10 +133,7 @@ public class Motorcycle implements Transport, Cloneable {
         clone.size = 0;
 
         for (Model cur = this.head.next; cur != this.head; cur = cur.next) {
-            Model newNode = new Model();
-            newNode.name = cur.name;
-            newNode.price = cur.price;
-            clone.insertLast(newNode);
+            clone.insertLast(new Model(cur.name, cur.price));
             clone.size++;
         }
 
