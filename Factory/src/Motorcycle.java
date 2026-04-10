@@ -6,6 +6,13 @@ public class Motorcycle implements Transport {
         double price = Double.NaN;
         Model prev = null;
         Model next = null;
+
+        Model() {}
+
+        Model(String name, double price) {
+            this.name = name;
+            this.price = price;
+        }
     }
 
     private final Model head = new Model();
@@ -108,10 +115,7 @@ public class Motorcycle implements Transport {
             }
         }
 
-        Model node = new Model();
-        node.name = name;
-        node.price = price;
-        insertLast(node);
+        insertLast(new Model(name, price));
         size++;
     }
 
