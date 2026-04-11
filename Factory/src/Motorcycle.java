@@ -118,6 +118,11 @@ public class Motorcycle implements Transport {
     }
 
     @Override
+    public void removeModelAlt(String name) throws NoSuchModelNameException {
+        removeModel(name);
+    }
+
+    @Override
     public int getModelCount() {
         return size;
     }

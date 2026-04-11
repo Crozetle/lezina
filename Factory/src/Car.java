@@ -117,6 +117,24 @@ public class Car implements Transport {
         }
         if (idx == -1) throw new NoSuchModelNameException(name);
 
+        Model[] newModels = new Model[models.length - 1];
+        System.arraycopy(models, 0, newModels, 0, idx);
+        System.arraycopy(models, idx + 1, newModels, idx, models.length - idx - 1);
+
+        models = newModels;
+    }
+
+    @Override
+    public void removeModelAlt(String name) throws NoSuchModelNameException {
+        int idx = -1;
+        for (int i = 0; i < models.length; i++) {
+            if (models[i] != null && models[i].name.equals(name)) {
+                idx = i;
+                break;
+            }
+        }
+        if (idx == -1) throw new NoSuchModelNameException(name);
+
         Model[] newModels = Arrays.copyOf(models, models.length - 1);
         System.arraycopy(models, idx + 1, newModels, idx, models.length - idx - 1);
 
