@@ -21,11 +21,9 @@ class MotoFactory implements TransportFactory {
 }
 
 
-class TransportUtils {
+class Test {
 
     private static TransportFactory factory = new AutoFactory();
-
-    private TransportUtils() {}
 
     public static void setTransportFactory(TransportFactory f) {
         factory = f;
@@ -64,7 +62,7 @@ class TransportUtils {
 
     public static void main(String[] args) {
         System.out.println("AutoFactory\n");
-        Transport car = TransportUtils.createInstance("Toyota");
+        Transport car = createInstance("Toyota");
         System.out.println("Создан объект типа: " + car.getBrand());
 
         try {
@@ -81,9 +79,9 @@ class TransportUtils {
 
 
         System.out.println("\nMotoFactory\n");
-        TransportUtils.setTransportFactory(new MotoFactory());
+        setTransportFactory(new MotoFactory());
 
-        Transport moto = TransportUtils.createInstance("Honda");
+        Transport moto = createInstance("Honda");
         System.out.println("Создан объект типа: " + moto.getBrand());
 
         try {

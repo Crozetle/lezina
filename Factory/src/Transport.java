@@ -4,6 +4,8 @@ public interface Transport {
 
     void removeModel(String name) throws NoSuchModelNameException;
 
+    void removeModelAlt(String name) throws NoSuchModelNameException;
+
 
     String getBrand();
 
