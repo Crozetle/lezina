@@ -5,7 +5,6 @@ interface TransportFactory {
 
 
 class AutoFactory implements TransportFactory {
-
     @Override
     public Transport createInstance(String brand) {
         return new Car(brand);

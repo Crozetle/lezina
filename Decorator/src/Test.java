@@ -1,8 +1,4 @@
 class Test {
-
-    // Фабричный метод — точка входа для клиента.
-    // Возвращает декоратор, не раскрывая его конкретный тип:
-    // клиент работает только с интерфейсом Transport.
     static Transport synchronizedTransport(Transport t) {
         return new SynchronizedTransport(t);
     }
