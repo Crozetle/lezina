@@ -50,51 +50,38 @@ public class Car implements Transport {
     }
 
     @Override
-    public double getModelPrice(String name) throws NoSuchModelNameException {
+    public double getModelPrice(String name) {
         for (Model m : models) {
             if (m != null && m.name.equals(name))
                 return m.price;
         }
-        throw new NoSuchModelNameException(name);
+        throw new RuntimeException("Модель не найдена: " + name);
     }
 
     @Override
-    public void setModelPrice(String name, double price) throws NoSuchModelNameException {
-        if (price < 0) throw new ModelPriceOutOfBoundsException(price);
+    public void setModelPrice(String name, double price) {
         for (Model m : models) {
             if (m != null && m.name.equals(name)) {
                 m.price = price;
                 return;
             }
         }
-        throw new NoSuchModelNameException(name);
+        throw new RuntimeException("Модель не найдена: " + name);
     }
 
     @Override
-    public void setModelName(String oldName, String newName)
-            throws NoSuchModelNameException, DuplicateModelNameException {
-        for (Model m : models) {
-            if (m != null && m.name.equals(newName))
-                throw new DuplicateModelNameException(newName);
-        }
+    public void setModelName(String oldName, String newName) {
         for (Model m : models) {
             if (m != null && m.name.equals(oldName)) {
                 m.name = newName;
                 return;
             }
         }
-        throw new NoSuchModelNameException(oldName);
+        throw new RuntimeException("Модель не найдена: " + oldName);
     }
 
     @Override
-    public void addModel(String name, double price) throws DuplicateModelNameException {
-        if (price < 0) throw new ModelPriceOutOfBoundsException(price);
-
-        for (Model m : models) {
-            if (m != null && m.name.equals(name))
-                throw new DuplicateModelNameException(name);
-        }
-
+    public void addModel(String name, double price) {
         for (int i = 0; i < models.length; i++) {
             if (models[i] == null) {
                 models[i] = new Model(name, price);
@@ -107,7 +94,7 @@ public class Car implements Transport {
     }
 
     @Override
-    public void removeModel(String name) throws NoSuchModelNameException {
+    public void removeModel(String name) {
         int idx = -1;
         for (int i = 0; i < models.length; i++) {
             if (models[i] != null && models[i].name.equals(name)) {
@@ -115,7 +102,7 @@ public class Car implements Transport {
                 break;
             }
         }
-        if (idx == -1) throw new NoSuchModelNameException(name);
+        if (idx == -1) throw new RuntimeException("Модель не найдена: " + name);
 
         Model[] newModels = new Model[models.length - 1];
         System.arraycopy(models, 0, newModels, 0, idx);
@@ -125,7 +112,7 @@ public class Car implements Transport {
     }
 
     @Override
-    public void removeModelAlt(String name) throws NoSuchModelNameException {
+    public void removeModelAlt(String name) {
         int idx = -1;
         for (int i = 0; i < models.length; i++) {
             if (models[i] != null && models[i].name.equals(name)) {
@@ -133,7 +120,7 @@ public class Car implements Transport {
                 break;
             }
         }
-        if (idx == -1) throw new NoSuchModelNameException(name);
+        if (idx == -1) throw new RuntimeException("Модель не найдена: " + name);
 
         Model[] newModels = Arrays.copyOf(models, models.length - 1);
         System.arraycopy(models, idx + 1, newModels, idx, models.length - idx - 1);

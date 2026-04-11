@@ -27,17 +27,17 @@ class SynchronizedTransport implements Transport {
     // при параллельных вызовах addModel, removeModel и setModelPrice.
 
     @Override
-    public synchronized void addModel(String name, double price) throws DuplicateModelNameException {
+    public synchronized void addModel(String name, double price) {
         delegate.addModel(name, price);
     }
 
     @Override
-    public synchronized void removeModel(String name) throws NoSuchModelNameException {
+    public synchronized void removeModel(String name) {
         delegate.removeModel(name);
     }
 
     @Override
-    public synchronized void removeModelAlt(String name) throws NoSuchModelNameException {
+    public synchronized void removeModelAlt(String name) {
         delegate.removeModelAlt(name);
     }
 
@@ -60,7 +60,7 @@ class SynchronizedTransport implements Transport {
     }
 
     @Override
-    public synchronized double getModelPrice(String name) throws NoSuchModelNameException {
+    public synchronized double getModelPrice(String name) {
         return delegate.getModelPrice(name);
     }
 
@@ -75,13 +75,12 @@ class SynchronizedTransport implements Transport {
     }
 
     @Override
-    public synchronized void setModelPrice(String name, double price) throws NoSuchModelNameException {
+    public synchronized void setModelPrice(String name, double price) {
         delegate.setModelPrice(name, price);
     }
 
     @Override
-    public synchronized void setModelName(String oldName, String newName)
-            throws NoSuchModelNameException, DuplicateModelNameException {
+    public synchronized void setModelName(String oldName, String newName) {
         delegate.setModelName(oldName, newName);
     }
 }
