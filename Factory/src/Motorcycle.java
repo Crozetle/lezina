@@ -6,27 +6,33 @@ public class Motorcycle implements Transport {
         double price = Double.NaN;
         Model prev = null;
         Model next = null;
+        boolean nan = true;
 
         Model() {}
 
         Model(String name, double price) {
             this.name = name;
             this.price = price;
+            this.nan = false;
         }
     }
 
     private final Model head = new Model();
-
     {
         head.prev = head;
         head.next = head;
+        head.nan = false;
     }
 
     private String brand;
     private int size = 0;
 
-    public Motorcycle(String brand) {
+    public Motorcycle(String brand, int initSize) {
         this.brand = brand;
+        for (int i = 0; i < initSize; i++) {
+            insertLast(new Model());
+            ++size;
+        }
     }
 
     private void insertLast(Model node) {
@@ -103,8 +109,18 @@ public class Motorcycle implements Transport {
 
         if (findByName(name) != null) throw new DuplicateModelNameException(name);
 
-        insertLast(new Model(name, price));
-        size++;
+        for (Model cur = head.next; cur != head; cur = cur.next) {
+            if (cur.nan) {
+               cur.name = name;
+               cur.price = price;
+               cur.nan = false;
+               break;
+            } else {
+                insertLast(new Model(name, price));
+                size++;
+            }
+        }
+
     }
 
     @Override

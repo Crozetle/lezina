@@ -7,7 +7,7 @@ class AppConfig {
     private static final AppConfig INSTANCE = new AppConfig();
     private final Properties properties;
 
-    protected AppConfig() {
+    private AppConfig() {
         properties = new Properties();
 
         try (InputStream input = getClass().getResourceAsStream("/config.properties")) {
@@ -18,7 +18,7 @@ class AppConfig {
         }
     }
 
-    public static AppConfig getInstance() {
+    public  static synchronized AppConfig getInstance() {
         return INSTANCE;
     }
 
@@ -45,7 +45,7 @@ class Test {
         System.out.println("Имя приложения 1 : " + config1.getProperty("app.name"));
         System.out.println("Имя приложения 2 : " + config2.getProperty("app.name"));
 
-        System.out.println("Версия 2         : " + config2.getProperty("app.version"));
-        System.out.println("Порт сервера 2   : " + config2.getProperty("server.port"));
+        System.out.println("Версия 2 : " + config2.getProperty("app.version"));
+        System.out.println("Порт сервера 2 : " + config2.getProperty("server.port"));
     }
 }

@@ -110,6 +110,19 @@ class Test {
             System.out.println(carOriginal != carCopy);
             System.out.println(carOriginal.getModelNames() != carCopy.getModelNames());
 
+            Motorcycle motoOriginal = new Motorcycle("Honda1");
+            motoOriginal.addModel("1", 100);
+            motoOriginal.addModel("2", 200);
+
+            Motorcycle motoCopy = (Motorcycle) motoOriginal.clone();
+            motoCopy.setBrand("Honda копия");
+            motoCopy.setModelPrice("2", 333);
+
+            motoCopy.addModel("3", 1);
+
+            System.out.println("Оригинал: " + motoOriginal);
+            System.out.println("Копия:    " + motoCopy);
+
         } catch (CloneNotSupportedException e) {
             System.err.println("Клонирование не поддерживается: " + e.getMessage());
         } catch (Exception e) {

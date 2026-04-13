@@ -16,9 +16,9 @@ public class Car implements Transport {
     private String brand;
     private Model[] models;
 
-    public Car(String brand) {
+    public Car(String brand, int size) {
         this.brand = brand;
-        this.models = new Model[1];
+        this.models = new Model[size];
     }
 
     @Override
@@ -149,7 +149,7 @@ public class Car implements Transport {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("Автомобиль [").append(brand).append("]\n");
+        sb.append("Автомобиль ").append(brand).append("]\n");
         for (Model m : models) {
             if (m != null) {
                 sb.append("  Модель: ").append(m.name)

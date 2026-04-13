@@ -1,21 +1,21 @@
 
 interface TransportFactory {
-    Transport createInstance(String brand);
+    Transport createInstance(String brand, int size);
 }
 
 
 class AutoFactory implements TransportFactory {
     @Override
-    public Transport createInstance(String brand) {
-        return new Car(brand);
+    public Transport createInstance(String brand, int size) {
+        return new Car(brand, size);
     }
 }
 
 
 class MotoFactory implements TransportFactory {
     @Override
-    public Transport createInstance(String brand) {
-        return new Motorcycle(brand);
+    public Transport createInstance(String brand, int size) {
+        return new Motorcycle(brand, size);
     }
 }
 
@@ -28,8 +28,8 @@ class Test {
         factory = f;
     }
 
-    public static Transport createInstance(String brand) {
-        return factory.createInstance(brand);
+    public static Transport createInstance(String brand, int size) {
+        return factory.createInstance(brand, size);
     }
 
     public static double getAveragePrice(Transport t) {
@@ -61,8 +61,8 @@ class Test {
 
     public static void main(String[] args) {
         System.out.println("AutoFactory\n");
-        Transport car = createInstance("Toyota");
-        System.out.println("Создан объект типа: " + car.getBrand());
+        Transport car = createInstance("Toyota", 5);
+        System.out.println("Создан: " + car.getClass());
 
         try {
             car.addModel("Camry",  35000);
@@ -80,8 +80,8 @@ class Test {
         System.out.println("\nMotoFactory\n");
         setTransportFactory(new MotoFactory());
 
-        Transport moto = createInstance("Honda");
-        System.out.println("Создан объект типа: " + moto.getBrand());
+        Transport moto = createInstance("Honda", 4);
+        System.out.println("Создан: " + moto.getClass());
 
         try {
             moto.addModel("CBR600RR", 12000);

@@ -6,8 +6,8 @@ class Test {
     public static void main(String[] args) {
         Transport car = synchronizedTransport(new Car("Toyota"));
 
-        car.addModel("Camry",   35000);
-        car.addModel("RAV4",    42000);
+        car.addModel("Camry", 35000);
+        car.addModel("RAV4", 42000);
         car.addModel("Corolla", 25000);
 
         System.out.println("Марка: " + car.getBrand());
