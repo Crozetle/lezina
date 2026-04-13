@@ -1,80 +1,72 @@
-import java.util.Arrays;
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 public class TrafficFacade {
 
-    private static final int ROAD_WIDTH = 60;
-    private static final int LIGHT_POS = 57;
-    private static final int CAR_WIDTH = 4;
-    private static final int RENDER_MS = 150;
+    private static final int LIGHT_X = 600;
+    private static final int ROAD_Y  = 200;
 
-    private TrafficLight light;
-    private Car car;
+    public void start() {
+        SwingUtilities.invokeLater(() -> {
+            TrafficLight light = new TrafficLight();
+            Car car = new Car(light);
 
-    public void start(int durationSeconds) throws InterruptedException {
-        light = new TrafficLight();
-        car = new Car(light);
+            JPanel panel = createPanel(light, car);
 
-        light.start();
-        car.start();
+            JFrame frame = new JFrame("Светофор и автомобиль");
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.add(panel);
+            frame.pack();
+            frame.setLocationRelativeTo(null);
+            frame.setVisible(true);
 
-        long deadline = System.currentTimeMillis() + durationSeconds * 1000L;
+            light.start();
+            car.start();
 
-        while (System.currentTimeMillis() < deadline) {
-            String roadLine = buildRoadLine(car.getPosition(), light.getSignal());
-            String signalLine = buildSignalLine(light.getSignal());
-            String statusLine = buildStatusLine(car.getPosition(), car.isMoving());
-
-            System.out.println(roadLine);
-            System.out.println(signalLine);
-            System.out.println(statusLine);
-
-            Thread.sleep(RENDER_MS);
-        }
-
-        light.stop();
-        car.stop();
+            new Timer(50, e -> panel.repaint()).start();
+        });
     }
 
-    private String buildRoadLine(int carPos, TrafficLight.Signal signal) {
-        char[] road = new char[ROAD_WIDTH];
-        Arrays.fill(road, '.');
+    private JPanel createPanel(TrafficLight light, Car car) {
+        JPanel panel = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
 
-        road[LIGHT_POS] = '|';
-        road[LIGHT_POS + 1] = signalChar(signal);
-        road[LIGHT_POS + 2] = '|';
+                g.setColor(new Color(80, 80, 80));
+                g.fillRect(0, ROAD_Y, getWidth(), 40);
 
-        if (carPos + CAR_WIDTH <= LIGHT_POS) {
-            road[carPos] = '[';
-            road[carPos + 1] = '>';
-            road[carPos + 2] = '>';
-            road[carPos + 3] = ']';
-        }
+                int cx = car.getX();
 
-        return new String(road);
-    }
+                g.setColor(Color.BLUE);
+                g.fillRect(cx, ROAD_Y - 30, 70, 30);
 
-    private String buildSignalLine(TrafficLight.Signal signal) {
-        String ansi;
-        String name;
-        switch (signal) {
-            case RED: ansi = "\033[31m"; name = "КРАСНЫЙ"; break;
-            case YELLOW: ansi = "\033[33m"; name = "ЖЁЛТЫЙ";  break;
-            default: ansi = "\033[32m"; name = "ЗЕЛЁНЫЙ"; break;
-        }
-        // \033[0m сбрасывает цвет обратно
-        return "Сигнал: " + ansi + name + "\033[0m";
-    }
+                g.setColor(Color.DARK_GRAY);
+                g.fillRect(LIGHT_X + 5, ROAD_Y - 110, 40, 110);
 
-    private String buildStatusLine(int pos, boolean moving) {
-        String status = moving ? "Едет   " : "Стоит  ";
-        return "Статус: " + status + "  Позиция: " + String.format("%2d", pos) + "/" + (LIGHT_POS - 1);
-    }
+                TrafficLight.Signal sig = light.getSignal();
+                Color[] inactive = { new Color(80, 0, 0), new Color(80, 80, 0), new Color(0, 80, 0) };
+                Color[] active   = { Color.RED, Color.YELLOW, Color.GREEN };
+                TrafficLight.Signal[] order = {
+                    TrafficLight.Signal.RED,
+                    TrafficLight.Signal.YELLOW,
+                    TrafficLight.Signal.GREEN
+                };
+                int[] oy = { ROAD_Y - 108, ROAD_Y - 80, ROAD_Y - 52 };
 
-    private char signalChar(TrafficLight.Signal signal) {
-        switch (signal) {
-            case RED:    return 'R';
-            case YELLOW: return 'Y';
-            default:     return 'G';
-        }
+                for (int i = 0; i < 3; i++) {
+                    g.setColor(sig == order[i] ? active[i] : inactive[i]);
+                    g.fillOval(LIGHT_X + 12, oy[i], 24, 24);
+                }
+            }
+        };
+
+        panel.setPreferredSize(new Dimension(800, 280));
+        panel.setBackground(new Color(135, 206, 235));
+        return panel;
     }
 }

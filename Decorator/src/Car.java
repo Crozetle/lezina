@@ -1,6 +1,5 @@
 import java.util.Arrays;
 
-
 public class Car implements Transport {
 
     private static class Model {
@@ -50,51 +49,61 @@ public class Car implements Transport {
     }
 
     @Override
-    public double getModelPrice(String name) {
+    public double getModelPrice(String name) throws NoSuchModelNameException {
         for (Model m : models) {
             if (m != null && m.name.equals(name))
                 return m.price;
         }
-        throw new RuntimeException("Модель не найдена: " + name);
+        throw new NoSuchModelNameException(name);
     }
 
     @Override
-    public void setModelPrice(String name, double price) {
+    public void setModelPrice(String name, double price) throws NoSuchModelNameException {
+        if (price < 0) throw new ModelPriceOutOfBoundsException(price);
         for (Model m : models) {
             if (m != null && m.name.equals(name)) {
                 m.price = price;
                 return;
             }
         }
-        throw new RuntimeException("Модель не найдена: " + name);
+        throw new NoSuchModelNameException(name);
     }
 
     @Override
-    public void setModelName(String oldName, String newName) {
+    public void setModelName(String oldName, String newName)
+            throws NoSuchModelNameException, DuplicateModelNameException {
+        for (Model m : models) {
+            if (m != null && m.name.equals(newName))
+                throw new DuplicateModelNameException(newName);
+        }
         for (Model m : models) {
             if (m != null && m.name.equals(oldName)) {
                 m.name = newName;
                 return;
             }
         }
-        throw new RuntimeException("Модель не найдена: " + oldName);
+        throw new NoSuchModelNameException(oldName);
     }
 
     @Override
-    public void addModel(String name, double price) {
+    public void addModel(String name, double price) throws DuplicateModelNameException {
+        if (price < 0) throw new ModelPriceOutOfBoundsException(price);
+        for (Model m : models) {
+            if (m != null && m.name.equals(name))
+                throw new DuplicateModelNameException(name);
+        }
         for (int i = 0; i < models.length; i++) {
             if (models[i] == null) {
                 models[i] = new Model(name, price);
                 return;
             }
         }
-
         models = Arrays.copyOf(models, models.length + 1);
         models[models.length - 1] = new Model(name, price);
     }
 
     @Override
-    public void removeModel(String name) {
+    public void removeModel(String name) throws NoSuchModelNameException {
         int idx = -1;
         for (int i = 0; i < models.length; i++) {
             if (models[i] != null && models[i].name.equals(name)) {
@@ -102,17 +111,15 @@ public class Car implements Transport {
                 break;
             }
         }
-        if (idx == -1) throw new RuntimeException("Модель не найдена: " + name);
-
+        if (idx == -1) throw new NoSuchModelNameException(name);
         Model[] newModels = new Model[models.length - 1];
         System.arraycopy(models, 0, newModels, 0, idx);
         System.arraycopy(models, idx + 1, newModels, idx, models.length - idx - 1);
-
         models = newModels;
     }
 
     @Override
-    public void removeModelAlt(String name) {
+    public void removeModelAlt(String name) throws NoSuchModelNameException {
         int idx = -1;
         for (int i = 0; i < models.length; i++) {
             if (models[i] != null && models[i].name.equals(name)) {
@@ -120,11 +127,9 @@ public class Car implements Transport {
                 break;
             }
         }
-        if (idx == -1) throw new RuntimeException("Модель не найдена: " + name);
-
+        if (idx == -1) throw new NoSuchModelNameException(name);
         Model[] newModels = Arrays.copyOf(models, models.length - 1);
         System.arraycopy(models, idx + 1, newModels, idx, models.length - idx - 1);
-
         models = newModels;
     }
 

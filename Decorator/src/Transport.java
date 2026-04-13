@@ -1,9 +1,9 @@
 public interface Transport {
-    void addModel(String name, double price);
+    void addModel(String name, double price) throws DuplicateModelNameException;
 
-    void removeModel(String name);
+    void removeModel(String name) throws NoSuchModelNameException;
 
-    void removeModelAlt(String name);
+    void removeModelAlt(String name) throws NoSuchModelNameException;
 
     String getBrand();
 
@@ -11,13 +11,13 @@ public interface Transport {
 
     String[] getModelNames();
 
-    double getModelPrice(String name);
+    double getModelPrice(String name) throws NoSuchModelNameException;
 
     int getModelCount();
 
     void setBrand(String brand);
 
-    void setModelPrice(String name, double price);
+    void setModelPrice(String name, double price) throws NoSuchModelNameException;
 
-    void setModelName(String oldName, String newName);
+    void setModelName(String oldName, String newName) throws NoSuchModelNameException, DuplicateModelNameException;
 }
